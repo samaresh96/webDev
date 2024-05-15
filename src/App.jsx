@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
@@ -31,12 +31,6 @@ const App = () => {
     setFormData(contacts[index]);
     setEditIndex(index);
   };
-
-  const handleSave = () => {
-    setFormData({ name: '', age: '', hobby: '', email: '' });
-    setEditIndex(null);
-  };
-
   const handleDelete = (index) => {
     setContacts((prevContacts) => prevContacts.filter((_, i) => i !== index));
   };
@@ -134,3 +128,5 @@ const App = () => {
 };
 
 export default App;
+
+
