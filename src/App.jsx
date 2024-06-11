@@ -1,80 +1,124 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function App() {
-  const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    hobby: '',
-    email: '',
-  });
+const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [formData, setFormData] = useState({ name: '', age: '', hobby: '', email: '' });
+  const [editIndex, setEditIndex] = useState(null);
 
-  const [submittedData, setSubmittedData] = useState([]);
-
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.name && formData.age && formData.hobby && formData.email) {
-      setSubmittedData([...submittedData, formData]);
-      setFormData({
-        name: '',
-        age: '',
-        hobby: '',
-        email: '',
-      });
-    } else {
+    if (!formData.name || !formData.age || !formData.hobby || !formData.email) {
       alert('Please fill in all fields');
+      return;
     }
+    if (editIndex !== null) {
+      const updatedContacts = [...contacts];
+      updatedContacts[editIndex] = formData;
+      setContacts(updatedContacts);
+      setEditIndex(null);
+    } else {
+      setContacts((prevContacts) => [...prevContacts, formData]);
+    }
+    setFormData({ name: '', age: '', hobby: '', email: '' });
+  };
+
+  const handleEdit = (index) => {
+    setFormData(contacts[index]);
+    setEditIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    setContacts((prevContacts) => prevContacts.filter((_, i) => i !== index));
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Enter Details</h1>
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="name" className="block mb-1">Name:</label>
-            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md" required />
+    <div className="container mx-auto mt-5">
+      <h1 className="text-3xl mb-5">Enter Details</h1>
+      <form onSubmit={handleSubmit} className="mb-5">
+        <div className="flex flex-wrap mb-4">
+          <div className="w-full md:w-1/2 px-3 mb-4">
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Name"
+              className="w-full p-2 border rounded"
+            />
           </div>
-          <div>
-            <label htmlFor="age" className="block mb-1">Age:</label>
-            <input type="number" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md" required />
+          <div className="w-full md:w-1/2 px-3 mb-4">
+            <input
+              type="number"
+              name="age"
+              value={formData.age}
+              onChange={handleInputChange}
+              placeholder="Age"
+              className="w-full p-2 border rounded"
+            />
           </div>
-          <div>
-            <label htmlFor="hobby" className="block mb-1">Hobby:</label>
-            <input type="text" id="hobby" name="hobby" value={formData.hobby} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md" required />
+          <div className="w-full md:w-1/2 px-3 mb-4">
+            <input
+              type="text"
+              name="hobby"
+              value={formData.hobby}
+              onChange={handleInputChange}
+              placeholder="Hobby"
+              className="w-full p-2 border rounded"
+            />
           </div>
-          <div>
-            <label htmlFor="email" className="block mb-1">Email:</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-md" required />
+          <div className="w-full md:w-1/2 px-3 mb-4">
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              className="w-full p-2 border rounded"
+            />
           </div>
         </div>
-        <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Submit</button>
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          {editIndex !== null ? 'Save' : 'Submit'}
+        </button>
       </form>
       <div>
-        <h2 className="text-xl font-bold mb-2">Submitted Data</h2>
-        <table className="w-full border-collapse border border-gray-300">
+        <h2 className="text-2xl mb-3">Submitted Data</h2>
+        <table className="w-full">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-300 p-2">Name</th>
-              <th className="border border-gray-300 p-2">Age</th>
-              <th className="border border-gray-300 p-2">Hobby</th>
-              <th className="border border-gray-300 p-2">Email</th>
+            <tr className="bg-gray-100">
+              <th className="border px-4 py-2">Name</th>
+              <th className="border px-4 py-2">Age</th>
+              <th className="border px-4 py-2">Hobby</th>
+              <th className="border px-4 py-2">Email</th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {submittedData.map((data, index) => (
+            {contacts.map((contact, index) => (
               <tr key={index} className="bg-white">
-                <td className="border border-gray-300 p-2">{data.name}</td>
-                <td className="border border-gray-300 p-2">{data.age}</td>
-                <td className="border border-gray-300 p-2">{data.hobby}</td>
-                <td className="border border-gray-300 p-2">{data.email}</td>
+                <td className="border px-4 py-2">{contact.name}</td>
+                <td className="border px-4 py-2">{contact.age}</td>
+                <td className="border px-4 py-2">{contact.hobby}</td>
+                <td className="border px-4 py-2">{contact.email}</td>
+                <td className="border px-4 py-2">
+                  <button
+                    onClick={() => handleEdit(index)}
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded mr-1"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -82,6 +126,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
