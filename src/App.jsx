@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
 const App = () => {
- const [contacts, setContacts] = useState([]);
+
+
+
+  const [contacts, setContacts] = useState([]);
+
   const [formData, setFormData] = useState({ name: '', age: '', hobby: '', email: '', desire: '' });
 
   const [editIndex, setEditIndex] = useState(null);
@@ -26,7 +30,7 @@ const App = () => {
       setContacts((prevContacts) => [...prevContacts, formData]);
     }
     setFormData({ name: '', age: '', hobby: '', email: '', desire: '' });
-   
+
   };
 
   const handleEdit = (index) => {
@@ -52,6 +56,7 @@ const App = () => {
               onChange={handleInputChange}
               placeholder="Name"
               className="btn-primary"
+              autoComplete='off'
             />
           </div>
           <div className="input_btn">
