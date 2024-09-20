@@ -136,7 +136,7 @@ const App = () => {
                     onClick={() => handleDelete(index)}
                     className="btn_2"
                   >
-                    Delete
+                    Delete me
                   </button>
                 </td>
               </tr>
