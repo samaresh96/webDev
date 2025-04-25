@@ -10,6 +10,8 @@ const App = () => {
 
   const [editIndex, setEditIndex] = useState(null);
 
+  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -21,6 +23,31 @@ const App = () => {
       alert("fill in all the blanks")
       return;
     }
+
+     const dataToSend = {
+      name: formData.name,
+      age: formData.age,
+      hobby: formData.hobby,
+      email: formData.email,
+      desire: formData.desire, // Include 'desire' in the data sent
+    };
+
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (!response.ok) {
+        // Handle error responses from the server
+        console.error('Error submitting data:', response.status);
+        return;
+      }
+
+      const responseData = await response.json(); // Or response.text(), depending on your API
+      console.log('Data submitted successfully:', responseData);
+
     if (editIndex !== null) {
       const updatedContacts = [...contacts];
       updatedContacts[editIndex] = formData;
@@ -40,6 +67,9 @@ const App = () => {
   const handleDelete = (index) => {
     setContacts((prevContacts) => prevContacts.filter((_, i) => i !== index));
   };
+
+
+
 
   // jsx down below
 
