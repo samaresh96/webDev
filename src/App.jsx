@@ -33,7 +33,7 @@ const App = () => {
     };
 
     try {
-      const response = await fetch('/api/submit', {
+      const response = await fetch('http://http://65.1.100.7/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend),
